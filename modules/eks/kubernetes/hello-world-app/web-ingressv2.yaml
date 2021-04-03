@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: example-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    ## SSL Settings
+    #alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    #alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:289714961096:certificate/d4e4002f-33f1-4393-b0bf-f42fd818d0a0
+    # SSL Redirect Setting
+    # The action-name in the annotation must match the serviceName in the Ingress rules, and servicePort must be use-annotation.
+    #alb.ingress.kubernetes.io/actions.web: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+spec:
+  rules:
+  - http:
+      paths:
+              #- path: /* # SSL Redirect Setting
+              #backend:
+              #serviceName: web
+              #servicePort: use-annotation 
+      - path: /v2/*
+        backend:
+          serviceName: web2
+          servicePort: 80
+      - path: /*
+        backend:
+          serviceName: web
+          servicePort: 80
