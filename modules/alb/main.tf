@@ -23,7 +23,6 @@ module "alb" {
   load_balancer_create_timeout          = var.load_balancer_create_timeout 
   load_balancer_delete_timeout          = var.load_balancer_delete_timeout
   security_groups                       = var.security_groups 
-  subnet_mapping                        = var.subnet_mapping 
   tags                                  = var.tags 
   target_group_tags                     = var.target_group_tags 
   target_groups                         = var.target_groups 

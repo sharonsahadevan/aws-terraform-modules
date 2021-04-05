@@ -12,29 +12,29 @@ module "vpc" {
   public_subnets         = var.public_subnets
   tags = {
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    "name"        = "${var.app_name}_${var.environment}_vpc"
-    "environment" = var.environment
-    "project"     = var.app_name
+    "name"                                      = "${var.app_name}_${var.environment}_vpc"
+    "environment"                               = var.environment
+    "project"                                   = var.app_name
   }
 
   public_subnet_tags = {
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    "kubernetes.io/role/elb"                      = "1"
+    "kubernetes.io/role/elb"                    = "1"
   }
 
   private_subnet_tags = {
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    "kubernetes.io/role/internal-elb"             = "1"
+    "kubernetes.io/role/internal-elb"           = "1"
   }
 }
 
-module "eks_devops_assumable_roles"{
-  source = "./modules/iam_assumable_roles"
-  readonly_role_name          = var.devops_readonly_role_name
-  account_id                  = var.account_id
-  create_readonly_role        = var.create_readonly_role
-  readonly_role_requires_mfa  = var.readonly_role_requires_mfa
-  force_detach_policies       = var.force_detach_policies
+module "eks_devops_assumable_roles" {
+  source                     = "./modules/iam_assumable_roles"
+  readonly_role_name         = var.devops_readonly_role_name
+  account_id                 = var.account_id
+  create_readonly_role       = var.create_readonly_role
+  readonly_role_requires_mfa = var.readonly_role_requires_mfa
+  force_detach_policies      = var.force_detach_policies
 
 
 }
@@ -52,36 +52,36 @@ module "eks" {
   cluster_create_endpoint_private_access_sg_rule = var.cluster_create_endpoint_private_access_sg_rule
   cluster_endpoint_private_access_cidrs          = var.cluster_endpoint_private_access_cidrs
   cluster_endpoint_public_access_cidrs           = var.cluster_endpoint_public_access_cidrs
-  tags                                           = var.tags
+  tags                                           = var.eks_tags
   map_roles = [
-  {
-     rolearn  = "${module.eks_devops_assumable_roles.readonly_iam_role_arn}"
-     username = "devops-user"
-     groups   = ["system:masters"]
-   },
- ]
-  workers_group_defaults          = var.workers_group_defaults
+    {
+      rolearn  = "${module.eks_devops_assumable_roles.readonly_iam_role_arn}"
+      username = "devops-user"
+      groups   = ["system:masters"]
+    },
+  ]
+  workers_group_defaults = var.workers_group_defaults
   worker_groups = [
-  {
-    name                          = "${var.worker_group1_name}"
-    instance_type                 = "${var.worker_group1_instance_type}"
-    asg_desired_capacity          = var.worker_group1_asg_capacity
-    additional_security_group_ids = [module.eks_wg_one_sg.eks_wg_one_sg_id]
-  },
-  {
-    name                          = "${var.worker_group2_name}"
-    instance_type                 = "${var.worker_group2_instance_type}"
-    asg_desired_capacity          = var.worker_group2_asg_capacity
-    additional_security_group_ids = [module.eks_wg_two_sg.eks_wg_two_sg_id]
-  },
-  {
-    name                          = "${var.worker_group3_name}"
-    instance_type                 = "${var.worker_group3_instance_type}"
-    asg_desired_capacity          = var.worker_group3_asg_capacity
-    additional_security_group_ids = [module.eks_wg_three_sg.eks_wg_three_sg_id]
-  },
-  
-]
+    {
+      name                          = "${var.worker_group1_name}"
+      instance_type                 = "${var.worker_group1_instance_type}"
+      asg_desired_capacity          = var.worker_group1_asg_capacity
+      additional_security_group_ids = [module.eks_wg_one_sg.eks_wg_one_sg_id]
+    },
+    {
+      name                          = "${var.worker_group2_name}"
+      instance_type                 = "${var.worker_group2_instance_type}"
+      asg_desired_capacity          = var.worker_group2_asg_capacity
+      additional_security_group_ids = [module.eks_wg_two_sg.eks_wg_two_sg_id]
+    },
+    {
+      name                          = "${var.worker_group3_name}"
+      instance_type                 = "${var.worker_group3_instance_type}"
+      asg_desired_capacity          = var.worker_group3_asg_capacity
+      additional_security_group_ids = [module.eks_wg_three_sg.eks_wg_three_sg_id]
+    },
+
+  ]
 }
 
 
@@ -154,37 +154,70 @@ module "eks" {
 
 # eks management node 1
 module "eks_wg_one_sg" {
-  source                    = "./modules/security_group"
-  vpc_id                    = module.vpc.vpc_id
-  name                      = var.eks_wg_one_sg_name
-  description               = var.eks_wg_one_sg_description
-  egress_cidr_blocks        = var.eks_wg_one_sg_egress_cidr_blocks
-  egress_rules              = var.eks_wg_one_sg_egress_rules
-  ingress_with_cidr_blocks  = var.ingress_with_cidr_blocks
+  source                   = "./modules/security_group"
+  vpc_id                   = module.vpc.vpc_id
+  name                     = var.eks_wg_one_sg_name
+  description              = var.eks_wg_one_sg_description
+  egress_cidr_blocks       = var.eks_wg_one_sg_egress_cidr_blocks
+  egress_rules             = var.eks_wg_one_sg_egress_rules
+  ingress_with_cidr_blocks = var.ingress_with_cidr_blocks
 
 }
 
 # eks management node 2
 module "eks_wg_two_sg" {
-  source                    = "./modules/security_group"
-  vpc_id                    = module.vpc.vpc_id
-  name                      = var.eks_wg_two_sg_name
-  description               = var.eks_wg_two_sg_description
-  egress_cidr_blocks        = var.eks_wg_two_sg_egress_cidr_blocks
-  egress_rules              = var.eks_wg_two_sg_egress_rules
-  ingress_with_cidr_blocks  = var.ingress_with_cidr_blocks
+  source                   = "./modules/security_group"
+  vpc_id                   = module.vpc.vpc_id
+  name                     = var.eks_wg_two_sg_name
+  description              = var.eks_wg_two_sg_description
+  egress_cidr_blocks       = var.eks_wg_two_sg_egress_cidr_blocks
+  egress_rules             = var.eks_wg_two_sg_egress_rules
+  ingress_with_cidr_blocks = var.ingress_with_cidr_blocks
 
 }
 
 
 # eks management node 3
 module "eks_wg_three_sg" {
-  source                    = "./modules/security_group"
-  vpc_id                    = module.vpc.vpc_id
-  name                      = var.eks_wg_three_sg_name
-  description               = var.eks_wg_three_sg_description
-  egress_cidr_blocks        = var.eks_wg_three_sg_egress_cidr_blocks
-  egress_rules              = var.eks_wg_three_sg_egress_rules
-  ingress_with_cidr_blocks  = var.ingress_with_cidr_blocks
+  source                   = "./modules/security_group"
+  vpc_id                   = module.vpc.vpc_id
+  name                     = var.eks_wg_three_sg_name
+  description              = var.eks_wg_three_sg_description
+  egress_cidr_blocks       = var.eks_wg_three_sg_egress_cidr_blocks
+  egress_rules             = var.eks_wg_three_sg_egress_rules
+  ingress_with_cidr_blocks = var.ingress_with_cidr_blocks
+
+}
+
+# alb
+
+module "alb" {
+  source                           = "terraform-aws-modules/alb/aws"
+  version                          = "5.12.0"
+  name                             = var.name
+  name_prefix                      = var.name_prefix
+  subnets                          = var.public_subnets
+  vpc_id                           = var.vpc_id
+  create_lb                        = var.create_lb
+  drop_invalid_header_fields       = var.drop_invalid_header_fields
+  enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
+  enable_deletion_protection       = var.enable_deletion_protection
+  enable_http2                     = var.enable_http2
+  extra_ssl_certs                  = var.extra_ssl_certs
+  http_tcp_listeners               = var.http_tcp_listeners
+  https_listener_rules             = var.https_listener_rules
+  https_listeners                  = var.https_listeners
+  idle_timeout                     = var.idle_timeout
+  internal                         = var.internal
+  ip_address_type                  = var.ip_address_type
+  lb_tags                          = var.lb_tags
+  listener_ssl_policy_default      = var.listener_ssl_policy_default
+  load_balancer_create_timeout     = var.load_balancer_create_timeout
+  load_balancer_delete_timeout     = var.load_balancer_delete_timeout
+  security_groups                  = var.security_groups
+  tags                             = var.alb_tags
+  target_group_tags                = var.target_group_tags
+  target_groups                    = var.target_groups
+
 
 }

@@ -22,6 +22,7 @@ variable "vpc_id"{
 variable "access_logs"{
     type = map(string)
     description = "Map containing access logging configuration for load balancer."
+    default = {}
 }
 
 variable "create_lb " {
@@ -128,23 +129,22 @@ variable "security_groups " {
   
 }
 
-variable "subnet_mapping"{
-    type = list(map(string))
-    description = "A list of subnet mapping blocks describing subnets to attach to network load balancer"
-}
 
 variable "tags"{
     type = map(string)
     description = "A map of tags to add to all resources"
+    default = {}
 }
 
 variable "target_group_tags" {
     type = map(string)
     description = "A map of tags to add to all target groups"
+    default = {}
   
 }
 
 variable "target_groups "{
     type = any
     description = "A list of maps containing key/value pairs that define the target groups to be created. Order of these maps is important and the index of these are to be referenced in listener definitions. Required key/values: name, backend_protocol, backend_port"
+    default = []
 }
