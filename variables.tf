@@ -95,3 +95,34 @@ variable "tags" {
   type = map(string)
   
 }
+
+# eks security groups
+# eks worker node group 1
+variable "eks_wg_one_sg_name"{}
+variable "eks_wg_one_sg_description"{}
+variable "eks_wg_one_sg_egress_cidr_blocks"{}
+variable "eks_wg_one_sg_egress_rules"{}
+variable "eks_wg_one_sg_from_port"{}
+variable "eks_wg_one_sg_to_port"{}
+variable "eks_wg_one_sg_protocol"{}
+variable "eks_wg_one_sg_description"{}
+
+# eks worker node group 2
+variable "eks_wg_two_sg_name"{}
+variable "eks_wg_two_sg_description"{}
+variable "eks_wg_two_sg_egress_cidr_blocks"{}
+variable "eks_wg_two_sg_egress_rules"{}
+variable "eks_wg_two_sg_from_port"{}
+variable "eks_wg_two_sg_to_port"{}
+variable "eks_wg_two_sg_protocol"{}
+variable "eks_wg_two_sg_description"{}
+
+# eks worker node group 3
+variable "eks_wg_one_sg_name"{}
+variable "eks_wg_one_sg_description"{}
+variable "eks_wg_one_sg_egress_cidr_blocks"{}
+variable "eks_wg_one_sg_egress_rules"{}
+variable "eks_wg_one_sg_from_port"{}
+variable "eks_wg_one_sg_to_port"{}
+variable "eks_wg_one_sg_protocol"{}
+variable "eks_wg_one_sg_description"{}
