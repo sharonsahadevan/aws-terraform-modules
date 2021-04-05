@@ -60,6 +60,11 @@ ssh_sg_ingress_with_cidr_blocks = [{
   cidr_blocks = "10.0.0.0/16",
 }, ]
 
+# eks_devops_assumable_roles
+create_readonly_role = true 
+force_detach_policies = true 
+readonly_role_requires_mfa = true 
+ 
 
 #eks
 cluster_name = "redseal-dev-eks-test1"
@@ -70,6 +75,7 @@ cluster_endpoint_private_access = true
 cluster_create_endpoint_private_access_sg_rule = true 
 cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
 cluster_endpoint_private_access_cidrs = ["0.0.0.0/0"]
+workers_group_defaults = "gp2"
 
 worker_group1_name = "wg-1"
 worker_group1_instance_type = "t3.medium"
@@ -83,23 +89,14 @@ worker_group3_name = "wg-3"
 worker_group3_instance_type = "t3.medium"
 worker_group3_asg_capacity = 1
 
-root_volume_type = "gp2"
-
 tags = {
   "environment" = "dev"
   "project" = "redseal"
 }
 
-workers_group_defaults = "gp2"
 
-map_roles = [
-  {
-     rolearn  = "${module.iam_devops-assumable-roles.readonly_iam_role_arn}"
-     username = "devops-user"
-     groups   = ["system:masters"]
-   },
- ]
-}
+
+
   
 # eks security groups
 # eks worker node group 1

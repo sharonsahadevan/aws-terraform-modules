@@ -11,7 +11,7 @@
 # }
 
 
-module "iam_devops-assumable-roles" {
+module "iam_assumable_roles" {
   source                     = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
   version                    = "3.6.0"
   readonly_role_name         = var.readonly_role_name

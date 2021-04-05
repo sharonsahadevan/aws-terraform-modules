@@ -28,9 +28,20 @@ module "vpc" {
   }
 }
 
+module "eks_devops_assumable_roles"{
+  source = "./modules/iam_assumable_roles"
+  readonly_role_name          = var.devops_readonly_role_name
+  account_id                  = var.account_id
+  create_readonly_role        = var.create_readonly_role
+  readonly_role_requires_mfa  = var.readonly_role_requires_mfa
+  force_detach_policies       = var.force_detach_policies
+
+
+}
+
 module "eks" {
   source                                         = "./modules/eks"
-  account_id                                     = var.account_id
+  account_id                                     = var.account_id // sensitive variable
   cluster_name                                   = var.cluster_name
   cluster_version                                = var.cluster_version
   subnets                                        = module.vpc.private_subnets
@@ -42,8 +53,14 @@ module "eks" {
   cluster_endpoint_private_access_cidrs          = var.cluster_endpoint_private_access_cidrs
   cluster_endpoint_public_access_cidrs           = var.cluster_endpoint_public_access_cidrs
   tags                                           = var.tags
-  map_roles                                      = var.map_roles
-  workers_group_defaults                         = var.workers_group_defaults
+  map_roles = [
+  {
+     rolearn  = "${module.eks_devops_assumable_roles.readonly_iam_role_arn}"
+     username = "devops-user"
+     groups   = ["system:masters"]
+   },
+ ]
+  workers_group_defaults          = var.workers_group_defaults
   worker_groups = [
   {
     name                          = "${var.worker_group1_name}"

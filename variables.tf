@@ -18,6 +18,14 @@ variable "single_nat_gateway" {}
 variable "vpc_description" {}
 variable "one_nat_gateway_per_az"{}
 
+# eks_devops_assumable_roles
+variable "readonly_role_requires_mfa"{}
+variable "force_detach_policies"{}
+variable "create_readonly_role"{}
+variable "devops_readonly_role_name"{}
+
+
+
 
 #eks
 variable "cluster_name" {}
