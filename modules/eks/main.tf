@@ -8,9 +8,7 @@ provider "kubernetes" {
       "eks",
       "get-token",
       "--cluster-name",
-      data.aws_eks_cluster.cluster.name,
-      "--profile",
-      "${var.profile_name}"
+      data.aws_eks_cluster.cluster.name
     ]
   }
 }
@@ -33,6 +31,7 @@ module "eks" {
   worker_groups                                  = var.worker_groups
   workers_group_defaults                         = var.workers_group_defaults
   map_roles                                      = var.map_roles
+  
 
 #   workers_group_defaults = {
 #     root_volume_type = "gp2"
@@ -68,7 +67,7 @@ module "alb_ingress_iam-assumable-role-with-oidc" {
 
 
 data "template_file" "alb_iam_policy_template" {
-  template = file("./policy-templates/alb-iam-policy-template.json.tpl")
+  template = file("${path.root}/modules/eks/policy-templates/alb-iam-policy-template.json.tpl")
 }
 
 module "alb_iam_policy" {

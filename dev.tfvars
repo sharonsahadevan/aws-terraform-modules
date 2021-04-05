@@ -89,6 +89,17 @@ tags = {
   "environment" = "dev"
   "project" = "redseal"
 }
+
+workers_group_defaults = "gp2"
+
+map_roles = [
+  {
+     rolearn  = "${module.iam_devops-assumable-roles.readonly_iam_role_arn}"
+     username = "devops-user"
+     groups   = ["system:masters"]
+   },
+ ]
+}
   
 # eks security groups
 # eks worker node group 1

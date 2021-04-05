@@ -28,6 +28,9 @@ variable "cluster_endpoint_private_access" {}
 variable "cluster_create_endpoint_private_access_sg_rule" {}
 variable "cluster_endpoint_private_access_cidrs" {}
 variable "cluster_endpoint_public_access_cidrs" {}
+variable "map_roles"{}
+variable "workers_group_defaults"{}
+
 
 # worker group 1
 variable "worker_group1_name" {
@@ -105,7 +108,8 @@ variable "eks_wg_one_sg_egress_rules"{}
 variable "eks_wg_one_sg_from_port"{}
 variable "eks_wg_one_sg_to_port"{}
 variable "eks_wg_one_sg_protocol"{}
-variable "eks_wg_one_sg_description"{}
+variable "ingress_with_cidr_blocks"{}
+
 
 # eks worker node group 2
 variable "eks_wg_two_sg_name"{}
@@ -115,14 +119,13 @@ variable "eks_wg_two_sg_egress_rules"{}
 variable "eks_wg_two_sg_from_port"{}
 variable "eks_wg_two_sg_to_port"{}
 variable "eks_wg_two_sg_protocol"{}
-variable "eks_wg_two_sg_description"{}
+
 
 # eks worker node group 3
-variable "eks_wg_one_sg_name"{}
-variable "eks_wg_one_sg_description"{}
-variable "eks_wg_one_sg_egress_cidr_blocks"{}
-variable "eks_wg_one_sg_egress_rules"{}
-variable "eks_wg_one_sg_from_port"{}
-variable "eks_wg_one_sg_to_port"{}
-variable "eks_wg_one_sg_protocol"{}
-variable "eks_wg_one_sg_description"{}
+variable "eks_wg_three_sg_name"{}
+variable "eks_wg_three_sg_description"{}
+variable "eks_wg_three_sg_egress_cidr_blocks"{}
+variable "eks_wg_three_sg_egress_rules"{}
+variable "eks_wg_three_sg_from_port"{}
+variable "eks_wg_three_sg_to_port"{}
+variable "eks_wg_three_sg_protocol"{}

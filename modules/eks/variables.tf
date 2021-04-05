@@ -9,11 +9,8 @@ variable "cluster_create_endpoint_private_access_sg_rule" {}
 variable "cluster_endpoint_private_access_cidrs" {}
 variable "cluster_endpoint_public_access_cidrs" {}
 variable "account_id"{}
-variable "tags" {
-  type = map(string)
-}
-
-variable "worker_groups"{
-  type = any
-}
+variable "tags" {}
+variable "worker_groups"{}
+variable "workers_group_defaults"{}
+variable "map_roles"{}
 

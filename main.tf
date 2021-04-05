@@ -42,6 +42,8 @@ module "eks" {
   cluster_endpoint_private_access_cidrs          = var.cluster_endpoint_private_access_cidrs
   cluster_endpoint_public_access_cidrs           = var.cluster_endpoint_public_access_cidrs
   tags                                           = var.tags
+  map_roles                                      = var.map_roles
+  workers_group_defaults                         = var.workers_group_defaults
   worker_groups = [
   {
     name                          = "${var.worker_group1_name}"
@@ -53,13 +55,13 @@ module "eks" {
     name                          = "${var.worker_group2_name}"
     instance_type                 = "${var.worker_group2_instance_type}"
     asg_desired_capacity          = var.worker_group2_asg_capacity
-    additional_security_group_ids = [aws_security_group.worker_group_mgmt_two.id]
+    additional_security_group_ids = [module.eks_wg_two_sg.eks_wg_two_sg_id]
   },
   {
     name                          = "${var.worker_group3_name}"
     instance_type                 = "${var.worker_group3_instance_type}"
     asg_desired_capacity          = var.worker_group3_asg_capacity
-    additional_security_group_ids = [aws_security_group.worker_group_mgmt_three.id]
+    additional_security_group_ids = [module.eks_wg_three_sg.eks_wg_three_sg_id]
   },
   
 ]
