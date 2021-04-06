@@ -33,7 +33,6 @@ variable "cluster_endpoint_private_access" {}
 variable "cluster_create_endpoint_private_access_sg_rule" {}
 variable "cluster_endpoint_private_access_cidrs" {}
 variable "cluster_endpoint_public_access_cidrs" {}
-variable "map_roles" {}
 variable "workers_group_defaults" {}
 
 
@@ -100,7 +99,8 @@ variable "root_volume_type" {
 }
 
 variable "eks_tags" {
-  type = map(string)
+  type    = map(string)
+  default = {}
 
 }
 
@@ -110,9 +110,6 @@ variable "eks_wg_one_sg_name" {}
 variable "eks_wg_one_sg_description" {}
 variable "eks_wg_one_sg_egress_cidr_blocks" {}
 variable "eks_wg_one_sg_egress_rules" {}
-variable "eks_wg_one_sg_from_port" {}
-variable "eks_wg_one_sg_to_port" {}
-variable "eks_wg_one_sg_protocol" {}
 variable "ingress_with_cidr_blocks" {}
 
 
@@ -121,9 +118,7 @@ variable "eks_wg_two_sg_name" {}
 variable "eks_wg_two_sg_description" {}
 variable "eks_wg_two_sg_egress_cidr_blocks" {}
 variable "eks_wg_two_sg_egress_rules" {}
-variable "eks_wg_two_sg_from_port" {}
-variable "eks_wg_two_sg_to_port" {}
-variable "eks_wg_two_sg_protocol" {}
+
 
 
 # eks worker node group 3
@@ -131,9 +126,6 @@ variable "eks_wg_three_sg_name" {}
 variable "eks_wg_three_sg_description" {}
 variable "eks_wg_three_sg_egress_cidr_blocks" {}
 variable "eks_wg_three_sg_egress_rules" {}
-variable "eks_wg_three_sg_from_port" {}
-variable "eks_wg_three_sg_to_port" {}
-variable "eks_wg_three_sg_protocol" {}
 
 
 # alb
@@ -146,22 +138,15 @@ variable "name" {
 variable "name_prefix" {
   type        = string
   description = "The resource name prefix and Name tag of the load balancer. Cannot be longer than 6 characters"
+  default = ""
 
 }
 
-variable "subnets" {
-  type        = list(string)
-  description = "A list of subnets to associate with the load balancer. e.g. ['subnet-1a2b3c4d','subnet-1a2b3c4e','subnet-1a2b3c4f']"
-}
-
-variable "vpc_id" {
-  type        = string
-  description = "VPC id where the load balancer and other resources will be deployed"
-}
 
 variable "access_logs" {
   type        = map(string)
   description = "Map containing access logging configuration for load balancer."
+  default     = {}
 }
 
 variable "create_lb" {
@@ -196,23 +181,27 @@ variable "enable_http2" {
 variable "extra_ssl_certs" {
   type        = list(map(string))
   description = "A list of maps describing any extra SSL certificates to apply to the HTTPS listeners. Required key/values: certificate_arn, https_listener_index (the index of the listener within https_listeners which the cert applies toward)"
+  default     = []
 
 }
 
 variable "http_tcp_listeners" {
   type        = any
   description = "A list of maps describing the HTTP listeners or TCP ports for this ALB. Required key/values: port, protocol. Optional key/values: target_group_index (defaults to http_tcp_listeners[count.index])"
+  default     = []
 }
 
 variable "https_listener_rules" {
   type        = any
   description = "A list of maps describing the Listener Rules for this ALB. Required key/values: actions, conditions. Optional key/values: priority, https_listener_index (default to https_listeners[count.index])"
+  default     = []
 
 }
 
 variable "https_listeners" {
   type        = any
   description = "A list of maps describing the HTTPS listeners for this ALB. Required key/values: port, certificate_arn. Optional key/values: ssl_policy (defaults to ELBSecurityPolicy-2016-08), target_group_index (defaults to https_listeners[count.index])"
+  default     = []
 }
 
 variable "idle_timeout" {
@@ -224,6 +213,7 @@ variable "idle_timeout" {
 variable "internal" {
   type        = bool
   description = "Boolean determining if the load balancer is internal or externally facing"
+  default     = false
 
 }
 
@@ -235,6 +225,7 @@ variable "ip_address_type" {
 variable "lb_tags" {
   type        = map(string)
   description = "A map of tags to add to load balancer"
+  default     = {}
 
 }
 
@@ -265,26 +256,26 @@ variable "load_balancer_type" {
 variable "security_groups" {
   type        = list(string)
   description = "The security groups to attach to the load balancer. e.g. ['sg-edcd9784','sg-edcd9785']"
+  default     = []
 
 }
 
-variable "subnet_mapping" {
-  type        = list(map(string))
-  description = "A list of subnet mapping blocks describing subnets to attach to network load balancer"
-}
 
 variable "alb_tags" {
   type        = map(string)
   description = "A map of tags to add to all resources"
+  default     = {}
 }
 
 variable "target_group_tags" {
   type        = map(string)
   description = "A map of tags to add to all target groups"
+  default     = {}
 
 }
 
 variable "target_groups" {
   type        = any
   description = "A list of maps containing key/value pairs that define the target groups to be created. Order of these maps is important and the index of these are to be referenced in listener definitions. Required key/values: name, backend_protocol, backend_port"
+  default     = []
 }

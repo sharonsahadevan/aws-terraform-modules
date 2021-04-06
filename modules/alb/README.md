@@ -29,249 +29,37 @@ HTTP and HTTPS listeners with default actions:
 
 ```hcl
 module "alb" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "~> 5.0"
-  
-  name = "my-alb"
+  source                           = "terraform-aws-modules/alb/aws"
+  version                          = "5.12.0"
+  name                             = var.name
+  name_prefix                      = var.name_prefix
+  subnets                          = var.public_subnets
+  vpc_id                           = var.vpc_id
+  create_lb                        = var.create_lb
+  drop_invalid_header_fields       = var.drop_invalid_header_fields
+  enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
+  enable_deletion_protection       = var.enable_deletion_protection
+  enable_http2                     = var.enable_http2
+  extra_ssl_certs                  = var.extra_ssl_certs
+  http_tcp_listeners               = var.http_tcp_listeners
+  https_listener_rules             = var.https_listener_rules
+  https_listeners                  = var.https_listeners
+  idle_timeout                     = var.idle_timeout
+  internal                         = var.internal
+  ip_address_type                  = var.ip_address_type
+  lb_tags                          = var.lb_tags
+  listener_ssl_policy_default      = var.listener_ssl_policy_default
+  load_balancer_create_timeout     = var.load_balancer_create_timeout
+  load_balancer_delete_timeout     = var.load_balancer_delete_timeout
+  security_groups                  = var.security_groups
+  tags                             = var.alb_tags
+  target_group_tags                = var.target_group_tags
+  target_groups                    = var.target_groups
 
-  load_balancer_type = "application"
 
-  vpc_id             = "vpc-abcde012"
-  subnets            = ["subnet-abcde012", "subnet-bcde012a"]
-  security_groups    = ["sg-edcd9784", "sg-edcd9785"]
-  
-  access_logs = {
-    bucket = "my-alb-logs"
-  }
-
-  target_groups = [
-    {
-      name_prefix      = "pref-"
-      backend_protocol = "HTTP"
-      backend_port     = 80
-      target_type      = "instance"
-    }
-  ]
-
-  https_listeners = [
-    {
-      port               = 443
-      protocol           = "HTTPS"
-      certificate_arn    = "arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
-      target_group_index = 0
-    }
-  ]
-
-  http_tcp_listeners = [
-    {
-      port               = 80
-      protocol           = "HTTP"
-      target_group_index = 0
-    }
-  ]
-
-  tags = {
-    Environment = "Test"
-  }
 }
 ```
 
-HTTP to HTTPS redirect and HTTPS cognito authentication:
-
-```hcl
-module "alb" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "~> 5.0"
-  
-  name = "my-alb"
-
-  load_balancer_type = "application"
-
-  vpc_id             = "vpc-abcde012"
-  subnets            = ["subnet-abcde012", "subnet-bcde012a"]
-  security_groups    = ["sg-edcd9784", "sg-edcd9785"]
-  
-  access_logs = {
-    bucket = "my-alb-logs"
-  }
-
-  target_groups = [
-    {
-      name_prefix      = "pref-"
-      backend_protocol = "HTTPS"
-      backend_port     = 443
-      target_type      = "instance"
-    }
-  ]
-
-  https_listeners = [
-    {
-      port                 = 443
-      protocol             = "HTTPS"
-      certificate_arn      = "arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
-      action_type          = "authenticate-cognito"
-      target_group_index   = 0
-      authenticate_cognito = {
-        user_pool_arn       = "arn:aws:cognito-idp::123456789012:userpool/test-pool"
-        user_pool_client_id = "6oRmFiS0JHk="
-        user_pool_domain    = "test-domain-com"
-      }
-    }
-  ]
-
-  http_tcp_listeners = [
-    {
-      port        = 80
-      protocol    = "HTTP"
-      action_type = "redirect"
-      redirect = {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
-      }
-    }
-  ]
-
-  tags = {
-    Environment = "Test"
-  }
-}
-```
-
-Cognito Authentication only on certain routes, with redirects for other routes:
-
-```hcl
-module "alb" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "~> 5.0"
-  
-  name = "my-alb"
-
-  load_balancer_type = "application"
-
-  vpc_id             = "vpc-abcde012"
-  subnets            = ["subnet-abcde012", "subnet-bcde012a"]
-  security_groups    = ["sg-edcd9784", "sg-edcd9785"]
-  
-  access_logs = {
-    bucket = "my-alb-logs"
-  }
-
-  target_groups = [
-    {
-      name_prefix      = "default"
-      backend_protocol = "HTTPS"
-      backend_port     = 443
-      target_type      = "instance"
-    }
-  ]
-
-  https_listeners = [
-    {
-      port                 = 443
-      certificate_arn      = "arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
-    }
-  ]
-
-  https_listener_rules = [
-    {
-      https_listener_index = 0
-      priority             = 5000
-
-      actions = [{
-        type        = "redirect"
-        status_code = "HTTP_302"
-        host        = "www.youtube.com"
-        path        = "/watch"
-        query       = "v=dQw4w9WgXcQ"
-        protocol    = "HTTPS"
-      }]
-
-      conditions = [{
-        path_patterns = ["/onboarding", "/docs"]
-      }]
-    },
-    {
-      https_listener_index = 0
-      priority             = 2
-
-      actions = [
-        {
-          type = "authenticate-cognito"
-
-          user_pool_arn       = "arn:aws:cognito-idp::123456789012:userpool/test-pool"
-          user_pool_client_id = "6oRmFiS0JHk="
-          user_pool_domain    = "test-domain-com"
-        },
-        {
-          type               = "forward"
-          target_group_index = 0
-        }
-      ]
-
-      conditions = [{
-        path_patterns = ["/protected-route", "private/*"]
-      }]
-    }
-  ]
-}
-```
-
-When you're using ALB Listener rules, make sure that every rule's `actions` block ends in a `forward`, `redirect`, or `fixed-response` action so that every rule will resolve to some sort of an HTTP response. Checkout the [AWS documentation](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-update-rules.html) for more information.
-
-### Network Load Balancer (TCP_UDP, UDP, TCP and TLS listeners)
-
-```hcl
-module "nlb" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "~> 5.0"
-  
-  name = "my-nlb"
-
-  load_balancer_type = "network"
-
-  vpc_id  = "vpc-abcde012"
-  subnets = ["subnet-abcde012", "subnet-bcde012a"]
-  
-  access_logs = {
-    bucket = "my-nlb-logs"
-  }
-
-  target_groups = [
-    {
-      name_prefix      = "pref-"
-      backend_protocol = "TCP"
-      backend_port     = 80
-      target_type      = "ip"
-    }
-  ]
-
-  https_listeners = [
-    {
-      port               = 443
-      protocol           = "TLS"
-      certificate_arn    = "arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
-      target_group_index = 0
-    }
-  ]
-
-  http_tcp_listeners = [
-    {
-      port               = 80
-      protocol           = "TCP"
-      target_group_index = 0
-    }
-  ]
-
-  tags = {
-    Environment = "Test"
-  }
-}
-```
-
-## Assumptions
-
-It's recommended you use this module with [terraform-aws-vpc](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws), [terraform-aws-security-group](https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws), and [terraform-aws-autoscaling](https://registry.terraform.io/modules/terraform-aws-modules/autoscaling/aws/).
 
 ## Notes
 

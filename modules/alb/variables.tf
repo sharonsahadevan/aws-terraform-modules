@@ -6,6 +6,7 @@ variable "name"{
 variable "name_prefix" {
     type = string 
     description = "The resource name prefix and Name tag of the load balancer. Cannot be longer than 6 characters"
+    default = ""
   
 }
 
@@ -57,23 +58,27 @@ variable "enable_http2 " {
 variable "extra_ssl_certs" {
     type = list(map(string))
     description = "A list of maps describing any extra SSL certificates to apply to the HTTPS listeners. Required key/values: certificate_arn, https_listener_index (the index of the listener within https_listeners which the cert applies toward)"
+    default = []
   
 }
 
 variable "http_tcp_listeners "{
     type  = any
     description = "A list of maps describing the HTTP listeners or TCP ports for this ALB. Required key/values: port, protocol. Optional key/values: target_group_index (defaults to http_tcp_listeners[count.index])"
+    default = []
 }
 
 variable "https_listener_rules " {
     type = any
     description = "A list of maps describing the Listener Rules for this ALB. Required key/values: actions, conditions. Optional key/values: priority, https_listener_index (default to https_listeners[count.index])"
+    default = []
   
 }
 
 variable "https_listeners"{
     type = any
     description = "A list of maps describing the HTTPS listeners for this ALB. Required key/values: port, certificate_arn. Optional key/values: ssl_policy (defaults to ELBSecurityPolicy-2016-08), target_group_index (defaults to https_listeners[count.index])"
+    default = []
 }
 
 variable "idle_timeout" {
@@ -96,6 +101,7 @@ variable "ip_address_type"{
 variable "lb_tags" {
     type = map(string)
     description = "A map of tags to add to load balancer"
+    default = {}
   
 }
 
@@ -126,6 +132,7 @@ variable "load_balancer_type " {
 variable "security_groups " {
     type = list(string)
     description = "The security groups to attach to the load balancer. e.g. ['sg-edcd9784','sg-edcd9785']"
+    default = []
   
 }
 

@@ -84,74 +84,6 @@ module "eks" {
   ]
 }
 
-
-# EKS security groups
-# resource "aws_security_group" "worker_group_mgmt_one" {
-#   name_prefix = "worker_group_mgmt_one"
-#   vpc_id      = module.vpc.vpc_id
-
-#   ingress {
-#     from_port = 22
-#     to_port   = 22
-#     protocol  = "tcp"
-
-#     cidr_blocks = [
-#       "10.0.0.0/8",
-#     ]
-#   }
-# }
-
-# resource "aws_security_group" "worker_group_mgmt_two" {
-#   name_prefix = "worker_group_mgmt_two"
-#   vpc_id      = module.vpc.vpc_id
-
-#   ingress {
-#     from_port = 22
-#     to_port   = 22
-#     protocol  = "tcp"
-
-#     cidr_blocks = [
-#       "192.168.0.0/16",
-#       "10.0.0.0/8",
-#     ]
-#   }
-# }
-
-# resource "aws_security_group" "worker_group_mgmt_three" {
-#   name_prefix = "worker_group_mgmt_two"
-#   vpc_id      = module.vpc.vpc_id
-
-#   ingress {
-#     from_port = 22
-#     to_port   = 22
-#     protocol  = "tcp"
-
-#     cidr_blocks = [
-#       "192.168.0.0/16",
-#       "10.0.0.0/8",
-#     ]
-#   }
-# }
-
-
-# resource "aws_security_group" "all_worker_mgmt" {
-#   name_prefix = "all_worker_management"
-#   vpc_id      = module.vpc.vpc_id
-
-#   ingress {
-#     from_port = 22
-#     to_port   = 22
-#     protocol  = "tcp"
-
-#     cidr_blocks = [
-#       "10.0.0.0/8",
-#       "172.16.0.0/12",
-#       "192.168.0.0/16",
-#     ]
-#   }
-# }
-
-
 # eks management node 1
 module "eks_wg_one_sg" {
   source                   = "./modules/security_group"
@@ -190,14 +122,14 @@ module "eks_wg_three_sg" {
 }
 
 # alb
-
 module "alb" {
-  source                           = "terraform-aws-modules/alb/aws"
-  version                          = "5.12.0"
-  name                             = var.name
-  name_prefix                      = var.name_prefix
-  subnets                          = var.public_subnets
-  vpc_id                           = var.vpc_id
+  source      = "terraform-aws-modules/alb/aws"
+  version     = "5.12.0"
+  name        = var.name
+  #name_prefix = var.name_prefix
+  # access_logs                      = var.access_logs // need to enable after S3 bucket is created. Refer the README.md for more information
+  subnets                          = [module.vpc.public_subnets[0],module.vpc.public_subnets[1]]
+  vpc_id                           = module.vpc.vpc_id
   create_lb                        = var.create_lb
   drop_invalid_header_fields       = var.drop_invalid_header_fields
   enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
