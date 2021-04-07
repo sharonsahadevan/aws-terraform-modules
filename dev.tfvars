@@ -139,13 +139,13 @@ internal    = false
 # RDS
 rds_name                            = "redseal-ctp-dev-rds"
 rds_instance_type                   = "db.r5.large"
-rds_instance_type_replica           = "db.r5.large"
+rds_instance_type_replica           = "db.t3.large"
 rds_allowed_cidr_blocks             = []
 rds_replica_count                   = 1
 rds_replica_scale_enabled           = false
 rds_replica_scale_min               = 1
 rds_replica_scale_max               = 1
-rds_monitoring_interval             = 300
+rds_monitoring_interval             = 60
 rds_iam_role_max_session_duration   = 3600 // Maximum session duration (in seconds) that you want to set for the role
 rds_apply_immediately               = false
 rds_db_cluster_parameter_group_name = "redseal-ctp-dev-db-cluster-parameter-group"

@@ -54,3 +54,11 @@ resource "aws_rds_cluster_parameter_group" "redseal_ctp_rds_cluster_parameter_gr
   tags        = local.tags
 }
 
+# resource "aws_db_subnet_group" "redseal_ctp_dev_rds_db_subnet_group" {
+#   name       = "main"
+#   subnet_ids = [aws_subnet.frontend.id, aws_subnet.backend.id]
+
+#   tags = {
+#     Name = "redseal_ctp_dev_rds_subnet_group"
+#   }
+# }
