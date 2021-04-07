@@ -138,7 +138,7 @@ variable "name" {
 variable "name_prefix" {
   type        = string
   description = "The resource name prefix and Name tag of the load balancer. Cannot be longer than 6 characters"
-  default = ""
+  default     = ""
 
 }
 
@@ -279,3 +279,105 @@ variable "target_groups" {
   description = "A list of maps containing key/value pairs that define the target groups to be created. Order of these maps is important and the index of these are to be referenced in listener definitions. Required key/values: name, backend_protocol, backend_port"
   default     = []
 }
+
+
+# RDS
+
+variable "rds_name" {
+  type    = string
+  default = "redseal_ctp_dev_rds"
+}
+variable "rds_engine" {
+  type    = string
+  default = "aurora"
+}
+variable "rds_engine_version" {
+  type    = string
+  default = "5.6.10a"
+}
+variable "rds_instance_type" {
+  type = string
+}
+variable "rds_instance_type_replica" {
+  type = string
+}
+
+variable "rds_create_security_group" {
+  type    = bool
+  default = true
+}
+variable "rds_allowed_cidr_blocks" {
+  type    = list(string)
+  default = []
+}
+variable "rds_replica_count" {
+  type    = number
+  default = 1
+}
+variable "rds_replica_scale_enabled" {
+  type    = bool
+  default = true
+}
+variable "rds_replica_scale_min" {
+  type    = number
+  default = 2
+}
+variable "rds_replica_scale_max" {
+  type = number
+}
+variable "rds_monitoring_interval" {
+  type    = number
+  default = 300
+
+}
+variable "rds_iam_role_use_name_prefix" {
+  type    = bool
+  default = false
+
+}
+variable "rds_iam_role_path" {
+  type = string
+}
+
+variable "rds_iam_role_max_session_duration" {
+  type = number
+}
+variable "rds_apply_immediately" {
+  type    = bool
+  default = false
+}
+variable "rds_skip_final_snapshot" {
+  type    = bool
+  default = true
+}
+variable "rds_enabled_cloudwatch_logs_exports" {
+  type        = list(string)
+  description = "Description: List of log types to export to cloudwatch - `audit`, `error`, `general`, `slowquery`, `postgresql`"
+  default     = []
+
+}
+variable "rds_db_parameter_group_name" {
+  type = string
+}
+variable "rds_db_cluster_parameter_group_name" {
+  type = string
+}
+
+# RDS security group
+
+variable "redseal_ctp_dev_db_sg_name" {
+  type = string
+}
+
+variable "redseal_ctp_dev_db_sg_description" {
+  type = string
+}
+
+variable "redseal_ctp_dev_db_sg_egress_cidr_blocks" {
+  type = list(string)
+}
+
+variable "redseal_ctp_dev_db_sg_egress_rules" {
+  type = list(string)
+}
+

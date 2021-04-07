@@ -26,20 +26,20 @@ variable "access_logs"{
     default = {}
 }
 
-variable "create_lb " {
+variable "create_lb" {
     type = bool
     description = "Controls if the Load Balancer should be created"
   
 }
 
-variable "drop_invalid_header_fields " {
+variable "drop_invalid_header_fields" {
     type = bool 
     description = "Indicates whether invalid header fields are dropped in application load balancers. Defaults to false"
 
   
 }
 
-variable "enable_cross_zone_load_balancing " {
+variable "enable_cross_zone_load_balancing" {
     type = bool
     description = "Indicates whether cross zone load balancing should be enabled in application load balancers."
   
@@ -50,7 +50,7 @@ variable "enable_deletion_protection"{
     description = "If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer. Defaults to false"
 }
 
-variable "enable_http2 " {
+variable "enable_http2" {
   type = bool
   description = "Indicates whether HTTP/2 is enabled in application load balancers."
 }
@@ -62,13 +62,13 @@ variable "extra_ssl_certs" {
   
 }
 
-variable "http_tcp_listeners "{
+variable "http_tcp_listeners"{
     type  = any
     description = "A list of maps describing the HTTP listeners or TCP ports for this ALB. Required key/values: port, protocol. Optional key/values: target_group_index (defaults to http_tcp_listeners[count.index])"
     default = []
 }
 
-variable "https_listener_rules " {
+variable "https_listener_rules" {
     type = any
     description = "A list of maps describing the Listener Rules for this ALB. Required key/values: actions, conditions. Optional key/values: priority, https_listener_index (default to https_listeners[count.index])"
     default = []
@@ -111,25 +111,26 @@ variable "listener_ssl_policy_default" {
   
 }
 
-variable "load_balancer_create_timeout " {
+variable "load_balancer_create_timeout" {
     type = string
     description = "Timeout value when creating the ALB."
   
 }
 
-variable "load_balancer_delete_timeout " {
+variable "load_balancer_delete_timeout" {
     type = string
     description = "Timeout value when deleting the ALB."
   
 }
 
-variable "load_balancer_type " {
+variable "load_balancer_type" {
     type = string
     description = "The type of load balancer to create. Possible values are application or network"
+    default = "application"
   
 }
 
-variable "security_groups " {
+variable "security_groups" {
     type = list(string)
     description = "The security groups to attach to the load balancer. e.g. ['sg-edcd9784','sg-edcd9785']"
     default = []
@@ -150,7 +151,7 @@ variable "target_group_tags" {
   
 }
 
-variable "target_groups "{
+variable "target_groups"{
     type = any
     description = "A list of maps containing key/value pairs that define the target groups to be created. Order of these maps is important and the index of these are to be referenced in listener definitions. Required key/values: name, backend_protocol, backend_port"
     default = []

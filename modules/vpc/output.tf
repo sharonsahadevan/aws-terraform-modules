@@ -1,11 +1,17 @@
 
+# VPC
 
 output "default_security_group_id" {
   description = "The ID of the security group created by default on VPC creation"
   value       = module.vpc.default_security_group_id
 }
 
-# VPC
+
+output "database_subnet_group_name"{
+  description = ""
+  value = module.vpc.database_subnet_group_name
+}
+
 output "vpc_id" {
   description = "The ID of the VPC"
   value       = module.vpc.vpc_id

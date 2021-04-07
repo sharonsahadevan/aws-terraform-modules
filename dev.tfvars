@@ -131,6 +131,32 @@ eks_wg_three_sg_to_port            = 1
 eks_wg_three_sg_cidr_blocks        = ["0.0.0.0/0"]
 
 # alb
-name = "redseal-ctp-dev-alb" // underscores are not allowed.
+name        = "redseal-ctp-dev-alb" // underscores are not allowed.
 name_prefix = "dev"
-internal = false
+internal    = false
+
+
+# RDS
+rds_name                            = "redseal-ctp-dev-rds"
+rds_instance_type                   = "db.r5.large"
+rds_instance_type_replica           = "db.r5.large"
+rds_allowed_cidr_blocks             = []
+rds_replica_count                   = 1
+rds_replica_scale_enabled           = false
+rds_replica_scale_min               = 1
+rds_replica_scale_max               = 1
+rds_monitoring_interval             = 300
+rds_iam_role_max_session_duration   = 3600 // Maximum session duration (in seconds) that you want to set for the role
+rds_apply_immediately               = false
+rds_db_cluster_parameter_group_name = "redseal-ctp-dev-db-cluster-parameter-group"
+rds_db_parameter_group_name         = "redseal-ctp-dev-db-parameter-group"
+
+
+# RDS security group
+redseal_ctp_dev_db_sg_name               = "redseal-ctp-dev-db-sg"
+redseal_ctp_dev_db_sg_description        = "redseal ctp dev db security group"
+redseal_ctp_dev_db_sg_egress_cidr_blocks = ["0.0.0.0/0"]
+redseal_ctp_dev_db_sg_egress_rules       = ["all-all"]
+
+
+

@@ -3,7 +3,7 @@ module "alb" {
   version                               = "5.12.0"
   name                                  = var.name 
   name_prefix                           = var.name_prefix 
-  subnets                               = var.private_subnets 
+  subnets                               = var.subnets 
   vpc_id                                = var.vpc_id
   access_logs                           = var.access_logs 
   create_lb                             = var.create_lb 

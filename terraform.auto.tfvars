@@ -26,3 +26,11 @@ force_detach_policies      = true
 readonly_role_requires_mfa = true
 
 
+# RDS
+rds_engine_version                  = "5.6.10a"
+rds_engine                          = "aurora"
+rds_create_security_group           = true
+rds_apply_immediately               = false
+rds_skip_final_snapshot             = true
+rds_enabled_cloudwatch_logs_exports = []
+rds_iam_role_path                   = "/"
