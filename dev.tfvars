@@ -7,6 +7,12 @@ terraform_state_s3_bucket = "redseal_dev_terraform_state_s3"
 eb_keypair                = "redseal_dev_eb"
 healthcheck_url           = "/"
 account_id                = 493223896872
+organization              = "redseal"
+application               = "ctp"
+owner                     = "terraform"
+stack                     = "dev"
+
+
 
 # VPC
 region                 = "us-west-1"
@@ -159,4 +165,11 @@ redseal_ctp_dev_db_sg_egress_cidr_blocks = ["0.0.0.0/0"]
 redseal_ctp_dev_db_sg_egress_rules       = ["all-all"]
 
 
+# ECR
 
+ecr_enabled              = true
+ecr_namespace            = "redseal"
+ecr_stage                = ""
+ecr_name                 = "ecr"
+ecr_image_tag_mutability = "IMMUTABLE"
+ecr_max_image_count      = 500

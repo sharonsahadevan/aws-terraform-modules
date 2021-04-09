@@ -4,6 +4,11 @@ variable "aws_profile_name" {}
 variable "eb_keypair" {}
 variable "healthcheck_url" {}
 variable "account_id" {}
+variable "stack" {}
+variable "organization"{}
+variable "application"{}
+variable "owner"{}
+
 
 #VPC
 variable "environment" {}
@@ -381,3 +386,34 @@ variable "redseal_ctp_dev_db_sg_egress_rules" {
   type = list(string)
 }
 
+
+# ECR
+
+variable "ecr_enabled"{
+    type = bool
+    default = true
+}
+
+variable "ecr_namespace"{
+    type = string 
+
+}
+
+variable "ecr_stage"{
+    type = string
+}
+
+variable "ecr_name"{
+    type = string
+}
+
+variable "ecr_max_image_count" {
+  type = number
+}
+
+
+variable "ecr_image_tag_mutability" {
+  type = string
+  default = "IMMUTABLE"
+  
+}

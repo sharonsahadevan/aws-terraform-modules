@@ -34,3 +34,7 @@ rds_apply_immediately               = false
 rds_skip_final_snapshot             = true
 rds_enabled_cloudwatch_logs_exports = []
 rds_iam_role_path                   = "/"
+
+
+# ECR
+ecr_version = "0.32.2"
